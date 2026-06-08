@@ -242,6 +242,54 @@ const answersPdfContent = (result: InterviewPrepResult) =>
     )
     .join("");
 
+const rewrittenResumePdfContent = (result: InterviewPrepResult) => {
+  const lines = result.rewrittenResume.split(/\n/);
+  let html = "";
+  let listOpen = false;
+
+  const closeList = () => {
+    if (listOpen) {
+      html += "</ul>";
+      listOpen = false;
+    }
+  };
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      closeList();
+      return;
+    }
+
+    if (trimmed.startsWith("## ")) {
+      closeList();
+      html += `<h2>${escapeHtml(trimmed.slice(3))}</h2>`;
+      return;
+    }
+
+    if (trimmed.startsWith("# ")) {
+      closeList();
+      html += `<h1>${escapeHtml(trimmed.slice(2))}</h1>`;
+      return;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      if (!listOpen) {
+        html += "<ul>";
+        listOpen = true;
+      }
+      html += `<li>${escapeHtml(trimmed.slice(2))}</li>`;
+      return;
+    }
+
+    closeList();
+    html += `<p>${escapeHtml(trimmed)}</p>`;
+  });
+
+  closeList();
+  return html;
+};
+
 export default function InterviewPrepPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { resumes } = useResumeStore();
@@ -446,6 +494,14 @@ export default function InterviewPrepPage() {
     );
   };
 
+  const exportRewrittenResumePdf = async () => {
+    if (!result) return;
+    await exportHtmlToPdf(
+      `${result.resumeName || "resume"}-${result.jobTitle || "岗位"}-润色版简历.pdf`,
+      buildPdfDocument("岗位定向润色版简历", rewrittenResumePdfContent(result))
+    );
+  };
+
   if (!hasMounted) {
     return (
       <ScrollArea className="h-[calc(100vh-2rem)] w-full">
@@ -514,11 +570,11 @@ export default function InterviewPrepPage() {
             </Button>
             <Button
               disabled={!result}
-              onClick={exportRewrittenResume}
+              onClick={exportRewrittenResumePdf}
               className="gap-2 bg-gray-900 text-white hover:bg-gray-800 dark:bg-primary dark:text-primary-foreground"
             >
               <FileText className="h-4 w-4" />
-              导出润色简历
+              润色简历 PDF
             </Button>
           </div>
         </motion.div>
