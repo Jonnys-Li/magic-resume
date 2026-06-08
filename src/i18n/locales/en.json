@@ -107,7 +107,8 @@
       "resumes": "Resumes",
       "settings": "Settings",
       "templates": "Templates",
-      "ai": "AI Config"
+      "ai": "AI Config",
+      "interview": "Interview Prep"
     },
     "resumes": {
       "created": "Created At",

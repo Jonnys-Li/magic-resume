@@ -30,6 +30,8 @@ Magic Resume 是一个现代化的在线简历编辑器，让创建专业简历�
 - 🔄 实时预览
 - 💾 自动保存
 - 🔒 硬盘级存储
+- 🧭 面试准备：上传简历 + 岗位 JD，生成个性化改造建议、岗位定向润色版简历、面试题 PDF、答案提示 PDF
+- 🧠 记忆系统：默认保存到浏览器本地；部署到 Cloudflare 并绑定 D1 后，可保存用户使用记录
 
 ## 🛠️ 技术栈
 
@@ -70,6 +72,36 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+## 🧭 面试准备扩展
+
+本 fork 新增了 `/app/dashboard/interview` 面试准备页面，适合零电脑经验用户直接使用：
+
+1. 选择已有简历，或上传 PDF/TXT/MD/JSON 简历。
+2. 填写目标岗位和招聘 JD。
+3. 点击“一键生成”，获得简历改造建议、润色版简历、从入门到进阶的面试题。
+4. 导出面试题 PDF、答案提示 PDF、润色版简历 Markdown。
+
+没有 AI Key 时会使用本地规则生成；在“AI 服务商”里配置豆包、DeepSeek、OpenAI 兼容端点或 Gemini 后，会调用 AI 生成更细的岗位定制版本。
+
+### Cloudflare Pages + D1 免费部署
+
+项目已保留 Cloudflare Worker/Pages 配置，适合做大陆访问相对友好的免费部署入口。历史记录默认存在浏览器本地；需要数据库记忆时：
+
+```bash
+pnpm install
+pnpm wrangler d1 create magic-resume-prep
+```
+
+把命令返回的 `database_id` 填到 `wrangler.toml` 的 `[[d1_databases]]` 注释块里，然后执行：
+
+```bash
+pnpm wrangler d1 migrations apply magic-resume-prep
+pnpm build
+pnpm wrangler deploy
+```
+
+如果暂时不绑定 D1，网站仍可正常使用，只是历史记录只保存在当前浏览器。
 
 ## 🐳 Docker 部署
 

@@ -108,7 +108,8 @@
       "resumes": "我的简历",
       "settings": "通用设置",
       "templates": "简历模板",
-      "ai": "AI服务商"
+      "ai": "AI服务商",
+      "interview": "面试准备"
     },
     "resumes": {
       "created": "创建于",

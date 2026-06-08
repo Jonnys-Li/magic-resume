@@ -83,3 +83,17 @@ export const IconAI: React.FC<IconProps> = ({ size = 24, className, active }) =>
     <rect x="5" y="28" width="8" height="8" rx="2" fill="#FA8C16" transform="rotate(25 9 32)" />
   </svg>
 );
+
+// Interview Prep: Flat checklist + sparkle
+export const IconInterview: React.FC<IconProps> = ({ size = 24, className, active }) => (
+  <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <rect x="5" y="4" width="30" height="32" rx="6" fill="#13C2C2" />
+    <rect x="11" y="11" width="18" height="3" rx="1.5" fill="white" />
+    <rect x="11" y="18" width="14" height="3" rx="1.5" fill="white" fillOpacity="0.82" />
+    <rect x="11" y="25" width="16" height="3" rx="1.5" fill="white" fillOpacity="0.82" />
+    <path d="M30 8L31.6 12.2L36 13.8L31.6 15.4L30 20L28.4 15.4L24 13.8L28.4 12.2L30 8Z" fill="#FAAD14" />
+    {active && (
+      <circle cx="31" cy="31" r="5" fill="#722ED1" stroke="white" strokeWidth="2" />
+    )}
+  </svg>
+);
