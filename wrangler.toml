@@ -6,12 +6,8 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "dist/client"
 
-# Optional: bind a Cloudflare D1 database named DB to persist interview-prep history.
-# Create one with:
-#   pnpm wrangler d1 create magic-resume-prep
-# Then paste the returned database_id below and remove the comment marks.
-#
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "magic-resume-prep"
-# database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+# Bind a Cloudflare D1 database named DB to persist interview-prep history.
+[[d1_databases]]
+binding = "DB"
+database_name = "magic-resume-prep"
+database_id = "809ed716-f36c-403e-b20d-5329c9e75859"

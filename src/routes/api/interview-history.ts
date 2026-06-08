@@ -17,6 +17,15 @@ const getDb = (context: any): D1DatabaseLike | null =>
   context?.platform?.env?.DB ||
   null;
 
+const getRuntimeDb = async () => {
+  try {
+    const runtime = await import("cloudflare:workers");
+    return ((runtime as any).env?.DB as D1DatabaseLike | undefined) || null;
+  } catch {
+    return null;
+  }
+};
+
 const missingDbResponse = () =>
   Response.json({
     records: [],
@@ -30,7 +39,7 @@ export const Route = createFileRoute("/api/interview-history")({
     handlers: {
       GET: async (args: any) => {
         const request = args.request as Request;
-        const db = getDb(args.context);
+        const db = getDb(args.context) || (await getRuntimeDb());
         if (!db) return missingDbResponse();
 
         const url = new URL(request.url);
@@ -60,7 +69,7 @@ export const Route = createFileRoute("/api/interview-history")({
       },
       POST: async (args: any) => {
         const request = args.request as Request;
-        const db = getDb(args.context);
+        const db = getDb(args.context) || (await getRuntimeDb());
         if (!db) return missingDbResponse();
 
         const body = (await request.json()) as {
